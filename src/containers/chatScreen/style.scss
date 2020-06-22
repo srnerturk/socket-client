@@ -12,7 +12,9 @@ ul{
   list-style: none;
 }
 
-
+.hidden{
+  display: none!important;
+}
 .container {
   margin: 0 auto;
   width: 960px;
@@ -137,7 +139,7 @@ ul{
       padding: 18px 20px;
       line-height: 26px;
       font-size: 16px;
-      border-radius: 7px;
+      border-radius: 18px;
       margin-bottom: 30px;
       width: 60%;
       position: relative;
@@ -151,7 +153,6 @@ ul{
         width: 0;
         position: absolute;
         pointer-events: none;
-        border-bottom-color: $blue;
         border-width: 10px;
         margin-left: -10px;
       }
@@ -167,7 +168,6 @@ ul{
       background: $green;
       
       &:after {
-        border-bottom-color: $green;
         left: 7%;
       }
     }

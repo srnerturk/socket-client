@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAlert } from 'react-alert';
 import { useLocation } from 'react-router-dom';
+import useSound from 'use-sound';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
+import userJoinedSound from '../../sounds/userjoined.mp3';
+import newMessageSound from '../../sounds/new-message.wav';
 import './style.scss';
 let socket;
 function ChatScreen() {
+  const [userJoined] = useSound(userJoinedSound);
+  const [newMessage] = useSound(newMessageSound);
   let location = useLocation();
   const ENDPOINT = 'https://srnsocketserver.herokuapp.com/';
   const alert = useAlert();
@@ -15,8 +20,9 @@ function ChatScreen() {
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-  const history = useHistory();
   const divRef = useRef(null);
+  const userJoinedTrigger = useRef();
+  const newMessageTrigger = useRef();
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
     socket = io(ENDPOINT);
@@ -36,19 +42,24 @@ function ChatScreen() {
         alert.show(message.text);
         return;
       }
+
       if (message.user.toLowerCase() !== name.toLocaleLowerCase()) {
+        newMessageTrigger.current.click();
         const msg = {
           chatMessage: message.text,
           type: 'other-message',
           user: message.user,
+          color: message.color,
         };
         setMessages((messages) => [...messages, msg]);
       }
     });
 
-    socket.on('roomData', ({ users }) => {
-      console.log(users);
-      setUsers([...users]);
+    socket.on('roomData', (data) => {
+      if(data.type==="login"){
+        userJoinedTrigger.current.click();
+      }
+      setUsers([...data.users]);
     });
   }, []);
 
@@ -61,6 +72,7 @@ function ChatScreen() {
       sendMessage();
     }
   }
+
   function sendMessage() {
     const { name, room } = queryString.parse(location.search);
     const msg = {
@@ -79,28 +91,28 @@ function ChatScreen() {
   }
   return (
     <div className='container clearfix'>
-      <div class='people-list' id='people-list'>
-        <ul class='list'>
+      <div className='people-list' id='people-list'>
+        <ul className='list'>
           {users.map((item, i) => (
-            <li class='clearfix'>
+            <li key={i} className='clearfix'>
               <div className='avatar'>
                 {item.name.substring(0, 1).toLocaleUpperCase()}
               </div>
-              <div class='about'>
-                <div class='name'>{item.name}</div>
-                <div class='status'>
-                  <div class='online'></div> online
+              <div className='about'>
+                <div className='name'>{item.name}</div>
+                <div className='status'>
+                  <div className='online'></div> online
                 </div>
               </div>
             </li>
           ))}
         </ul>
       </div>
-      <div class='chat'>
-        <div ref={divRef} class='chat-history'>
+      <div className='chat'>
+        <div ref={divRef} className='chat-history'>
           <ul>
             {messages.map((message, i) => (
-              <li class='clearfix'>
+              <li key={i} className='clearfix'>
                 <div
                   className={
                     message.type === 'other-message'
@@ -108,18 +120,23 @@ function ChatScreen() {
                       : 'message-data align-right'
                   }
                 >
-                  <span class='message-data-name'>{message.user}</span>
-                  <span class='message-data-time'>10:10 AM, Today</span> &nbsp;
-                  &nbsp;
+                  <span className='message-data-name'>{message.user}</span>
+                  <span className='message-data-time'>
+                    10:10 AM, Today
+                  </span>{' '}
+                  &nbsp; &nbsp;
                 </div>
-                <div className={`message ${message.type}`}>
+                <div
+                  style={{ backgroundColor: message.color }}
+                  className={`message ${message.type}`}
+                >
                   {message.chatMessage}
                 </div>
               </li>
             ))}
           </ul>
         </div>
-        <div class='chat-message clearfix'>
+        <div className='chat-message clearfix'>
           <textarea
             onKeyDown={(e) => onInputChange(e)}
             onChange={(e) => setMessage(e.target.value)}
@@ -128,6 +145,20 @@ function ChatScreen() {
             rows='3'
           ></textarea>
           <button onClick={() => sendMessage()}>Send</button>
+          <button
+            className='hidden'
+            ref={userJoinedTrigger}
+            onClick={() => userJoined()}
+          >
+            UserJoined
+          </button>
+          <button
+            className='hidden'
+            ref={newMessageTrigger}
+            onClick={() => newMessage()}
+          >
+            NewMessage
+          </button>
         </div>
       </div>
     </div>
