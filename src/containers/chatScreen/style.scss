@@ -261,3 +261,40 @@ ul{
 	height: 0;
 }
 
+@media (max-width: 767px) {
+  .app{
+    margin-top:0!important;
+  }
+  body{
+    background: #fff;
+  }
+  .container{
+    width: 100%;
+    background: #fff;
+    margin-top: 0;
+  }
+
+  .people-list{
+    display: none;
+  }
+
+  .chat{
+    width: 100%;
+
+    .chat-history{
+      margin-bottom: 100px;
+    }
+    .chat-message{
+      position: fixed;
+      bottom: 0;
+      background: #F2F5F8;
+      width: 100%;
+      textarea{
+        height: 50px;
+        border:1px solid #ccc
+      }
+    }
+  }
+
+
+}

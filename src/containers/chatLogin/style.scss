@@ -1,5 +1,5 @@
 .chatRoom {
-  margin:0 auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   width: 360px;
@@ -7,11 +7,18 @@
   background: #fff;
   padding: 30px;
   border-radius: 10px;
-  .form-gr{
+  .form-gr {
     margin-bottom: 15px;
-    label{
-      color:#ccc;
-      font-size:14px;
+    label {
+      color: #ccc;
+      font-size: 14px;
     }
+  }
+}
+@media (max-width: 767px) {
+  .chatRoom {
+    margin-top: 50px;
+    width: 100%;
+    padding: 20px;
   }
 }

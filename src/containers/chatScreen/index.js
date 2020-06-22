@@ -8,7 +8,7 @@ import './style.scss';
 let socket;
 function ChatScreen() {
   let location = useLocation();
-  const ENDPOINT = 'http://localhost:4001';
+  const ENDPOINT = 'https://srnsocketserver.herokuapp.com/';
   const alert = useAlert();
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
