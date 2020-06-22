@@ -1,0 +1,17 @@
+.chatRoom {
+  margin:0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  align-items: center;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  .form-gr{
+    margin-bottom: 15px;
+    label{
+      color:#ccc;
+      font-size:14px;
+    }
+  }
+}
