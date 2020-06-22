@@ -11,7 +11,7 @@
   "main": "index.js",
   "author": "serhan erturk",
   "license": "MIT",
-  "private": null,
+  "private": false,
   "dependencies": {
     "axios": "^0.19.2",
     "node-sass": "^4.14.1",
